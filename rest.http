@@ -1,0 +1,15 @@
+### home route
+GET http://localhost:8000/
+
+### register route
+POST http://localhost:8000/auth/register
+
+### login route
+POST http://localhost:8000/auth/login
+
+### refresh-token route
+POST http://localhost:8000/auth/refresh-token
+
+### logout route
+DELETE http://localhost:8000/auth/logout
+
