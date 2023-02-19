@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import createError from "http-errors";
 import AuthRoute from "./routes/auth.route.js"
+import middleware from "./middlewares/middleware.js";
 import './helpers/_init_mongodb.js'
 
 const app = express();
@@ -14,7 +15,8 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 
 // home-route
-app.get("/", async (req, res, next) => {
+app.get("/",middleware.verifyAccessToken, async (req, res, next) => {
+  console.log(req.headers['authorization'])
   res.send("<h1>HELLO</h1>");
 });
 

@@ -1,8 +1,7 @@
-
 import { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
 
 const UserSchema = Schema({
- 
   email: {
     type: String,
     required: true,
@@ -46,22 +45,35 @@ const UserSchema = Schema({
   gender: {
     type: String,
   },
- 
+
   profile_name: {
-    type: String
+    type: String,
   },
   profile_image: {
-    type:String,
-  },
-  ngo_preferences: {
-    type: [String],
-  },
-  work_history: {
     type: String,
   },
 
-  
 });
+
+UserSchema.pre("save", async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// can throw error as its a middleware
+UserSchema.methods.isValidPassword = async function(password){
+  try{
+    return await bcrypt.compare(password, this.password)
+  }catch(error){
+    next(error)
+  }
+}
 
 const User = model("user", UserSchema);
 

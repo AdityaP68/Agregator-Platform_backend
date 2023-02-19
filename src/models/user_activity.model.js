@@ -18,4 +18,10 @@ const UserActivitySchema = new Schema({
   campaigns_participated: {
     type: String,
   },
+  ngo_preferences: {
+    type: [String],
+  },
+  work_history: {
+    type: String,
+  },
 });
