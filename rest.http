@@ -3,6 +3,12 @@ GET http://localhost:8000/
 
 ### register route
 POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+    "email": "something@gmail.com",
+    "password": "fsvgsdbddg"
+}
 
 ### login route
 POST http://localhost:8000/auth/login

@@ -3,19 +3,22 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import createError from "http-errors";
 import AuthRoute from "./routes/auth.route.js"
+import './helpers/_init_mongodb.js'
 
 const app = express();
 const { json, urlencoded } = bodyParser;
 
 app.use(morgan("dev"));
-app.use(urlencoded({ extended: false }));
+
 app.use(json());
+app.use(urlencoded({ extended: true }));
 
 // home-route
 app.get("/", async (req, res, next) => {
   res.send("<h1>HELLO</h1>");
 });
 
+// auth-route
 app.use('/auth', AuthRoute)
 
 // all-catch-route
