@@ -7,13 +7,11 @@ const { userAuthSchema } = userschemaValidation;
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = jwt_helper;
 
 const userRegisterController = async (req, res, next) => {
-  //console.log(req.body);
-  try {
-    // const { email, password } = req.body;
-    const result = await userAuthSchema.validateAsync(req.body);
 
+  try {
+    const result = await userAuthSchema.validateAsync(req.body);
     const doesExists = await User.findOne({ email: result.email });
-    //console.log(doesExists);
+    console.log(doesExists);
     if (doesExists) {
       throw createError.Conflict(`${result.email} is an existing user`);
     }
@@ -26,8 +24,14 @@ const userRegisterController = async (req, res, next) => {
     res.send({ accessToken, refreshToken });
   } catch (error) {
     if (error.isJoi) {
+      const message = {};
+      error.details?.forEach((item) => {
+        message[item.context.label] = item.message?.replaceAll('\"', '');
+      });
+      error.message = message;
       error.status = 422;
     }
+
     next(error);
   }
 };
