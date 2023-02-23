@@ -7,13 +7,13 @@ const { userAuthSchema } = userschemaValidation;
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = jwt_helper;
 
 const userRegisterController = async (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   try {
     // const { email, password } = req.body;
     const result = await userAuthSchema.validateAsync(req.body);
 
     const doesExists = await User.findOne({ email: result.email });
-    console.log(doesExists);
+    //console.log(doesExists);
     if (doesExists) {
       throw createError.Conflict(`${result.email} is an existing user`);
     }
@@ -41,7 +41,7 @@ const userLoginController = async (req, res, next) => {
 
     const isMatch = await user.isValidPassword(result.password);
     if (!isMatch) throw createError.Unauthorized("Username/Password not valid");
-    
+
     const accessToken = await signAccessToken(user.id);
     const refreshToken = await signRefreshToken(user.id);
 
