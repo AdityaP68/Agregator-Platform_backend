@@ -7,7 +7,7 @@ const signAccessToken = (userId) => {
     const payload = {};
     const secret = config.ACCESS_TOKEN_SECRET;
     const options = {
-      expiresIn: "15s",
+      expiresIn: "3 days",
       issuer: "baracuda.com",
       audience: userId,
     };

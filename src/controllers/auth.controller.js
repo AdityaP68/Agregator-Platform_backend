@@ -1,17 +1,17 @@
 import User from "../models/user.model.js";
-import userschemaValidation from "../validation/userschema.validation.js";
+import userSchemaValidation from "../validation/userschema.validation.js";
 import createError from "http-errors";
 import jwt_helper from "../helpers/jwt_helper.js";
 
-const { userAuthSchema } = userschemaValidation;
+const { userAuthSchema } = userSchemaValidation;
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = jwt_helper;
 
 const userRegisterController = async (req, res, next) => {
-
   try {
     const result = await userAuthSchema.validateAsync(req.body);
     const doesExists = await User.findOne({ email: result.email });
-    console.log(doesExists);
+    
+    //console.log(doesExists);
     if (doesExists) {
       throw createError.Conflict(`${result.email} is an existing user`);
     }
@@ -23,15 +23,16 @@ const userRegisterController = async (req, res, next) => {
 
     res.send({ accessToken, refreshToken });
   } catch (error) {
+    // if error is thrown by joi schema validation append to the current error
     if (error.isJoi) {
       const message = {};
       error.details?.forEach((item) => {
-        message[item.context.label] = item.message?.replaceAll('\"', '');
+        message[item.context.label] = item.message?.replaceAll('"', "");
       });
       error.message = message;
       error.status = 422;
     }
-
+    
     next(error);
   }
 };

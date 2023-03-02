@@ -2,7 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import createError from "http-errors";
-import AuthRoute from "./routes/auth.route.js"
+import AuthRoutes from "./routes/auth.route.js"
+import UserRoutes from "./routes/user.route.js"
 import middleware from "./middlewares/middleware.js";
 import './helpers/_init_mongodb.js'
 
@@ -21,7 +22,8 @@ app.get("/",middleware.verifyAccessToken, async (req, res, next) => {
 });
 
 // auth-route
-app.use('/auth', AuthRoute)
+app.use('/auth', AuthRoutes)
+app.use('/user', UserRoutes)
 
 // all-catch-route
 app.use(async (req, res, next) => {
