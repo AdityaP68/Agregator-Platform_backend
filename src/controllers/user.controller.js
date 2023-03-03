@@ -4,12 +4,13 @@ import userschemaValidation from "../validation/userschema.validation.js";
 import createError from "http-errors";
 
 const getUserById = async (req, res, next) => {
-  //console.log(req.params.id);
   try {
-    const userId = mongoose.Types.ObjectId(req.params.id);
-    const user = await User.findOne(userId);
+    const userId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      throw createError.BadRequest("invalid user id");
+    const user = await User.findOne({ _id: userId });
     if (!user) throw createError.NotFound("user not found");
-    res.send(user);
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }
@@ -17,7 +18,15 @@ const getUserById = async (req, res, next) => {
 
 const updateUserById = async (req, res, next) => {
   try {
-    const user = req.body;
+    const userId = req.params.id;
+    const userDetails = req.body
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      throw createError.BadRequest("invalid user id");
+    const user = await User.findOne({ _id: userId });
+    if(!user) throw createError.NotFound('user not found')
+
+    // if user found in the database update the provided details 
+    
   } catch (error) {
     next(error);
   }
