@@ -8,11 +8,11 @@ const userAuthSchema = Joi.object({
     .required(),
   password: Joi.string()
     // validate password format (alphanumeric, 8-30 characters)
-    .pattern(
-      new RegExp(
-        "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@_#$])[A-Za-zd@_#$]{8,30}$"
-      )
-    )
+    // .pattern(
+    //   new RegExp(
+    //     "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@_#$])[A-Za-zd@_#$]{8,30}$"
+    //   )
+    // )
     .required(),
   first_name: Joi.string().trim().min(2).max(50).required(),
   last_name: Joi.string().trim().min(2).max(50).required(),

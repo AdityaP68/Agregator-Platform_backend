@@ -4,6 +4,8 @@ import morgan from "morgan";
 import createError from "http-errors";
 import AuthRoutes from "./routes/auth.route.js"
 import UserRoutes from "./routes/user.route.js"
+import PostsRoutes from "./routes/posts.route.js"
+//import PostsRoutes from "./routes/posts.route.js"
 import middleware from "./middlewares/middleware.js";
 import './helpers/_init_mongodb.js'
 
@@ -21,9 +23,12 @@ app.get("/",middleware.verifyAccessToken, async (req, res, next) => {
   res.send("<h1>HELLO</h1>");
 });
 
-// auth-route
+// auth routes
 app.use('/auth', AuthRoutes)
 app.use('/user', UserRoutes)
+
+//post routes
+app.use('/posts', PostsRoutes)
 
 // all-catch-route
 app.use(async (req, res, next) => {

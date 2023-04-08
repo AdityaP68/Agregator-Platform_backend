@@ -2,9 +2,11 @@ import User from "../models/user.model.js";
 import userSchemaValidation from "../validation/userschema.validation.js";
 import createError from "http-errors";
 import jwt_helper from "../helpers/jwt_helper.js";
+import formatter from "../helpers/formatter.js";
 
 const { userAuthSchema } = userSchemaValidation;
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = jwt_helper;
+const {JoiErrorFormatter} = formatter
 
 const userRegisterController = async (req, res, next) => {
   try {
@@ -25,12 +27,13 @@ const userRegisterController = async (req, res, next) => {
   } catch (error) {
     // if error is thrown by joi schema validation append to the current error
     if (error.isJoi) {
-      const message = {};
-      error.details?.forEach((item) => {
-        message[item.context.label] = item.message?.replaceAll('"', "");
-      });
-      error.message = message;
-      error.status = 422;
+      // const message = {};
+      // error.details?.forEach((item) => {
+      //   message[item.context.label] = item.message?.replaceAll('"', "");
+      // });
+      // error.message = message;
+      // error.status = 422;
+      JoiErrorFormatter(error)
     }
     
     next(error);
@@ -39,21 +42,24 @@ const userRegisterController = async (req, res, next) => {
 
 const userLoginController = async (req, res, next) => {
   try {
-    const result = await userAuthSchema.validateAsync(req.body);
+    //const result = await userAuthSchema.validateAsync(req.body);
+    const result = req.body
+    console.log("req", req.body)
     const user = await User.findOne({ email: result.email });
 
     if (!user) throw createError.NotFound("user not registered");
 
     const isMatch = await user.isValidPassword(result.password);
-    if (!isMatch) throw createError.Unauthorized("Username/Password not valid");
+    if (!isMatch) throw createError.Unauthorized("Email/Password not valid");
 
     const accessToken = await signAccessToken(user.id);
     const refreshToken = await signRefreshToken(user.id);
 
     res.send({ accessToken, refreshToken });
   } catch (error) {
+    console.log(error)
     if (error.isJoi) {
-      return next(createError.BadRequest("invalid Username/Password"));
+      return next(createError.BadRequest("invalid Email/Password"));
     }
     next(error);
   }

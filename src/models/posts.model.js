@@ -37,28 +37,28 @@ const PostSchema = Schema(
       required: true,
       default: 0,
     },
-    comments: [{ comment: String }],
-    media: {
-      type: {
-        type: String,
-        enum: ["image", "video"],
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-    },
-    post_type: {
-      type: String,
-      enum: [
-        "text/video",
-        "text/image",
-        "text",
-        "fundraiser",
-        "resource-pooling",
-      ],
-      required: true,
-    },
+    // comments: [{ comment: String }],
+    // media: {
+    //   type: {
+    //     type: String,
+    //     enum: ["image", "video"],
+    //   },
+    //   url: {
+    //     type: String,
+    //     required: true,
+    //   },
+    // },
+    // post_type: {
+    //   type: String,
+    //   enum: [
+    //     "text/video",
+    //     "text/image",
+    //     "text",
+    //     "fundraiser",
+    //     "resource-pooling",
+    //   ],
+    //   required: true,
+    // },
     userId: {
       type: mongoose.Types.ObjectId,
       required: true,
