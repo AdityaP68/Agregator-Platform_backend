@@ -1,72 +1,62 @@
 import mongoose, { Schema, model } from "mongoose";
 
-const PostSchema = Schema(
-  {
-    title: {
+const PostSchema = new Schema({
+  title: {
       type: String,
-      lowercase: true,
-      required: true,
-    },
-    description: {
-      type: String,
-      lowercase: true,
-      required: true,
-    },
-    likes: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    dislikes: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    views: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    shares: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    saves: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    // comments: [{ comment: String }],
-    // media: {
-    //   type: {
-    //     type: String,
-    //     enum: ["image", "video"],
-    //   },
-    //   url: {
-    //     type: String,
-    //     required: true,
-    //   },
-    // },
-    // post_type: {
-    //   type: String,
-    //   enum: [
-    //     "text/video",
-    //     "text/image",
-    //     "text",
-    //     "fundraiser",
-    //     "resource-pooling",
-    //   ],
-    //   required: true,
-    // },
-    userId: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-    },
+      required: true
   },
-  { timestamp: true }
-);
-
+  description: {
+      type: String,
+      required: true
+  },
+  category: {
+      type: String,
+      required: true
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  created_at: {
+      type: Date,
+      default: Date.now
+  },
+  socials: {
+      likes: {
+          type: Number,
+          default: 0
+      },
+      dislikes: {
+          type: Number,
+          default: 0
+      },
+      views: {
+          type: Number,
+          default: 0
+      },
+      shares: {
+          type: Number,
+          default: 0
+      }
+  },
+  is_media_attachment: {
+      type: Boolean,
+      default: false
+  },
+  media: {
+      media_type: {
+          type: String
+      },
+      url: {
+          type: String
+      }
+  },
+  updated_at: {
+      type: Date,
+      default: Date.now
+  }
+});
 
 
 const Posts = model("posts", PostSchema);

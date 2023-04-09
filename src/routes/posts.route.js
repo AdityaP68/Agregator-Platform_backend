@@ -1,7 +1,10 @@
 import { Router } from "express";
 import postsController from "../controllers/posts.controller.js";
+import authMiddleware from "../middlewares/middleware.js";
 
 const router = Router();
+
+const { verifyAccessToken } = authMiddleware;
 
 //Controllers
 const {
@@ -9,28 +12,28 @@ const {
   createPostByUserIdController,
   editPostByIdController,
   deletePostByIdController,
-  fetchLikesByPostIdController,
-  fetchDislikesByPostIdController,
-  fetchSharesByPostIdController,
+  // fetchLikesByPostIdController,
+  // fetchDislikesByPostIdController,
+  // fetchSharesByPostIdController,
   incrementLikesCountController,
   incrementDislikesCountController,
   incrementSharesCountController,
   fetchCommentsByPostIdController,
   createCommentByPostIdController,
   editCommentByIdController,
-  deleteCommentByIdController
+  deleteCommentByIdController,
 } = postsController;
 
 //Posts Routes
-router.get("/all/:userId", fetchPostsByUserIdController);
-router.post("/create/:userId", createPostByUserIdController);
-router.patch("/edit/:postId", editPostByIdController);
-router.delete("/delete/:postId", deletePostByIdController);
+router.get("/:userId", fetchPostsByUserIdController);
+router.post("/create/:userId",verifyAccessToken, createPostByUserIdController);
+router.patch("/edit/:postId/:userId", editPostByIdController);
+router.delete("/delete/:postId/:userId", deletePostByIdController);
 
 //Socials Routes
-router.get("/likes/:postId", fetchLikesByPostIdController);
-router.get("/dislikes/:postId", fetchDislikesByPostIdController);
-router.get("/shares/:postId", fetchSharesByPostIdController);
+// router.get("/likes/:postId", fetchLikesByPostIdController);
+// router.get("/dislikes/:postId", fetchDislikesByPostIdController);
+// router.get("/shares/:postId", fetchSharesByPostIdController);
 router.patch("/likes/upcount/:postId", incrementLikesCountController);
 router.patch("/dislikes/upcount/:postId", incrementDislikesCountController);
 router.patch("/shares/upcount/:postId", incrementSharesCountController);
@@ -64,4 +67,4 @@ router.delete("/comments/delete/:postId/:commentId");
 // router.patch("/comments/:commentId/edit", editCommentByIdController);
 // router.delete("/comments/:commentId", deleteCommentByIdController);
 
-export default router
+export default router;
