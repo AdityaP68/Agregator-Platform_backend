@@ -20,14 +20,34 @@ const PostSchemaValidator = Joi.object({
 });
 
 const PostUpdateValidator = Joi.object({
-  title: Joi.string().optional(),
-  description: Joi.string().optional(),
-  is_media_attachment: Joi.boolean().optional(),
+  title: Joi.string(),
+  description: Joi.string(),
+  category: Joi.string(),
+  socials: Joi.object({
+    likes: Joi.object({
+      count: Joi.number().min(0),
+      likedBy: Joi.array().items(Joi.string()),
+    }),
+    dislikes: Joi.object({
+      count: Joi.number().min(0),
+      dislikedBy: Joi.array().items(Joi.string()),
+    }),
+    views: Joi.object({
+      count: Joi.number().min(0),
+      viewedBy: Joi.array().items(Joi.string()),
+    }),
+    shares: Joi.object({
+      count: Joi.number().min(0),
+      sharedBy: Joi.array().items(Joi.string()),
+    }),
+  }),
+  is_media_attachment: Joi.boolean(),
   media: Joi.object({
     media_type: Joi.string(),
     url: Joi.string(),
-  }).optional(),
-  updated_at: Joi.date().default(Date.now),
+  }),
 });
+
+
 
 export default { PostSchemaValidator, PostUpdateValidator};

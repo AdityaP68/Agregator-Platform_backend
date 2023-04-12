@@ -91,7 +91,29 @@ const deletePostByIdController = async (req, res, next) => {
 
 // const fetchSharesByPostIdController = async (req, res, next) => {};
 
-const incrementLikesCountController = async (req, res, next) => {};
+const incrementLikesCountController = async (req, res, next) => {
+  try {
+    const { postId, userId } = req.params;
+    const { action } = req.query;
+
+    const post = Posts.findOne({ _id: postId });
+    if (!post) {
+      throw createError.NotFound("No post exist with id");
+    }
+    // if (String(post.created_by) !== userId) {
+    //   throw createError.MethodNotAllowed("Invalid operation by this user");
+    // }
+    if (action) {
+      if (action === "upcount" && post?.socials?.likes) {
+        post.socials.likes += 1;
+      }
+    }
+    res.json({ status: 204, message: "The like count has been incremented" });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+};
 
 const incrementDislikesCountController = async (req, res, next) => {};
 
