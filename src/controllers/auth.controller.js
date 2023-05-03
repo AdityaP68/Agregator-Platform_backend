@@ -25,6 +25,7 @@ const userRegisterController = async (req, res, next) => {
 
     res.send({ accessToken, refreshToken });
   } catch (error) {
+    console.log(error)
     // if error is thrown by joi schema validation append to the current error
     if (error.isJoi) {
       // const message = {};

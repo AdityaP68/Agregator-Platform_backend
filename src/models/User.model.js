@@ -30,11 +30,10 @@ const UserSchema = Schema({
     required: true,
   },
   mobileNumber: {
-    type: String,
+    type: Number,
     required: true,
     minlength: 8,
     maxlength: 10,
-    match: /^[0-9]{8,10}$/
   },
   address: {
     type: String,

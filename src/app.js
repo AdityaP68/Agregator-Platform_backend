@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from 'cors';
 import morgan from "morgan";
 import createError from "http-errors";
 import AuthRoutes from "./routes/auth.route.js"
@@ -16,6 +17,7 @@ app.use(morgan("dev"));
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
+app.use(cors());
 
 // home-route
 app.get("/",middleware.verifyAccessToken, async (req, res, next) => {

@@ -8,7 +8,7 @@ const userAuthSchema = Joi.object({
   confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  mobileNumber: Joi.string().pattern(new RegExp("^[0-9]{8,10}$")).required(),
+  mobileNumber: Joi.number().required(),
   address: Joi.string().required(),
   dateOfBirth: Joi.date().max('now').required(),
 })
