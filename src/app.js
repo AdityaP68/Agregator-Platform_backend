@@ -25,7 +25,7 @@ app.get("/",middleware.verifyAccessToken, async (req, res, next) => {
 
 // auth routes
 app.use('/auth', AuthRoutes)
-app.use('/user', UserRoutes)
+app.use('/users', UserRoutes)
 
 //post routes
 app.use('/posts', PostsRoutes)

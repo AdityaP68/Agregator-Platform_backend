@@ -2,59 +2,114 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const UserSchema = Schema({
+  role: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
     lowercase: true,
     unique: true,
   },
+  username: {
+    type: String,
+    required: true,
+  },
   password: {
     type: String,
     required: true,
+    min: 6,
   },
-  first_name: {
+  firstName: {
     type: String,
-    lowercase: true,
     required: true,
   },
-  last_name: {
+  lastName: {
     type: String,
-    lowercase: true,
     required: true,
   },
-  ph_no: {
-    type: Number,
+  mobileNumber: {
+    type: String,
     required: true,
-    unique: true,
+    minlength: 8,
+    maxlength: 10,
+    match: /^[0-9]{8,10}$/
   },
   address: {
     type: String,
     required: true,
+    minlength: 10,
+    maxlength: 100,
   },
-  city: {
+  dateOfBirth: {
     type: String,
-    lowercase: true,
     required: true,
+    max: 'now'
   },
-  state: {
-    type: String,
-    lowercase: true,
-    required: true,
-  },
-  zip_code: {
-    type: Number,
-    required: true,
-  },
-  date_of_birth: {
-    type: Date,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: ["male", "female", "other"],
-    required: true,
-  },
+  // gender: {
+  //   type: String,
+  //   enum: ["male", "female", "other"],
+  //   required: true,
+  // },
 });
+
+
+
+// const UserSchema = Schema({
+//   email: {
+//     type: String,
+//     required: true,
+//     lowercase: true,
+//     unique: true,
+//   },
+//   password: {
+//     type: String,
+//     required: true,
+//   },
+//   first_name: {
+//     type: String,
+//     lowercase: true,
+//     required: true,
+//   },
+//   last_name: {
+//     type: String,
+//     lowercase: true,
+//     required: true,
+//   },
+//   ph_no: {
+//     type: Number,
+//     required: true,
+//     unique: true,
+//   },
+//   address: {
+//     type: String,
+//     required: true,
+//   },
+//   city: {
+//     type: String,
+//     lowercase: true,
+//     required: true,
+//   },
+//   state: {
+//     type: String,
+//     lowercase: true,
+//     required: true,
+//   },
+//   zip_code: {
+//     type: Number,
+//     required: true,
+//   },
+//   date_of_birth: {
+//     type: Date,
+//     required: true,
+//   },
+//   gender: {
+//     type: String,
+//     enum: ["male", "female", "other"],
+//     required: true,
+//   },
+// });
 
 UserSchema.pre("save", async function (next) {
   try {
