@@ -8,7 +8,7 @@ const { verifyAccessToken } = authMiddleware;
 
 //Controllers
 const {
-  fetchPostsByUserIdController,
+  getAllPostsController,
   createPostByUserIdController,
   editPostByIdController,
   deletePostByIdController,
@@ -25,8 +25,8 @@ const {
 } = postsController;
 
 //Posts Routes
-router.get("/:userId", fetchPostsByUserIdController);
-router.post("/create/:userId",verifyAccessToken, createPostByUserIdController);
+router.get("/", getAllPostsController);
+router.post("/create/:userId", createPostByUserIdController);
 router.patch("/edit/:postId/:userId", editPostByIdController);
 router.delete("/delete/:postId/:userId", deletePostByIdController);
 

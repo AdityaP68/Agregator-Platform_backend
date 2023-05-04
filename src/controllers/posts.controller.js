@@ -1,30 +1,67 @@
 import Posts from "../models/posts.model.js";
 import PostsSchemaCheck from "../validation/postsSchema.validation.js";
+import User from "../models/user.model.js";
 import createError from "http-errors";
 import mongoose from "mongoose";
 
 const { PostSchemaValidator, PostUpdateValidator } = PostsSchemaCheck;
 
-const fetchPostsByUserIdController = async (req, res, next) => {};
+const getAllPostsController = async (req, res, next) => {
+  try {
+    // Fetch all posts
+    const posts = await Posts.find();
+
+    // Return the posts
+    return res.status(200).json({ count: posts?.length, posts });
+  } catch (error) {
+    // Pass any errors to the error handling middleware
+    next(error);
+  }
+};
 
 const createPostByUserIdController = async (req, res, next) => {
-  console.log(req.body);
   try {
-    const result = await PostSchemaValidator.validateAsync(req.body);
-    const doesExists = await Posts.findOne({
-      title: result.title,
-      created_by: result.created_by,
-    });
-    if (doesExists) {
-      throw createError.Conflict(`This post already exists`);
+    const userId = req.params.userId;
+    const { title, description, post_type, resource_type, resource_goal } =
+      req.body;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    const post = new Posts(result);
-    const savedPost = await post.save();
-    res.json({ creation: "success", ...savedPost._doc });
+
+    console.log("this is req.body", req.body);
+    // Create a new Post instance
+    const post = new Posts({
+      title,
+      description,
+      post_type,
+      created_by: user,
+      resource: {
+        resource_type,
+        resource_goal,
+      },
+    });
+
+    console.log(post);
+
+    await post.save();
+
+    // Save the post to the database
+    // await post.save();
+
+    console.log(post);
+
+    // Return a success response
+    return res.status(201).json({
+      message: "Post created successfully",
+      post: post
+    });
   } catch (error) {
-    // if (error.isJoi) {
-    //   console.log("joi error");
-    // }
+    // Pass any errors to the error handling middleware
     console.log(error.message);
     next(error);
   }
@@ -128,7 +165,7 @@ const editCommentByIdController = async (req, res, next) => {};
 const deleteCommentByIdController = async (req, res, next) => {};
 
 export default {
-  fetchPostsByUserIdController,
+  getAllPostsController,
   createPostByUserIdController,
   editPostByIdController,
   deletePostByIdController,

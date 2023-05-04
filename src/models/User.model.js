@@ -46,6 +46,15 @@ const UserSchema = Schema({
     required: true,
     max: 'now'
   },
+  ngoRegNumber: {
+    type: String,
+  },
+  decription: {
+    type: String,
+  },
+  about: {
+    type: String,
+  },
   // gender: {
   //   type: String,
   //   enum: ["male", "female", "other"],

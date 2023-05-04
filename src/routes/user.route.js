@@ -5,9 +5,10 @@ import middleware from "../middlewares/middleware.js";
 const router = Router();
 const { verifyAccessToken } = middleware;
 
-// router.get("/:id", userController.getUserById);
+router.get("/:id", userController.getUserById);
 
-// router.patch("/update/:id", userController.updateUserById);
+router.patch("/update/:id", userController.updateUserById);
+
 // router.delete("/delete/:id", userController.deleteUser);
 router.get('/ngo/search', async(req, res, next)=>{
     res.json({
@@ -70,5 +71,8 @@ router.get('/ngo/search', async(req, res, next)=>{
             }]
         })
 })
+
+
+
 
 export default router;

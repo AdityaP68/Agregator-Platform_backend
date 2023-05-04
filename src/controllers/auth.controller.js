@@ -6,13 +6,13 @@ import formatter from "../helpers/formatter.js";
 
 const { userAuthSchema } = userSchemaValidation;
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = jwt_helper;
-const {JoiErrorFormatter} = formatter
+const { JoiErrorFormatter } = formatter;
 
 const userRegisterController = async (req, res, next) => {
   try {
     const result = await userAuthSchema.validateAsync(req.body);
     const doesExists = await User.findOne({ email: result.email });
-    
+
     //console.log(doesExists);
     if (doesExists) {
       throw createError.Conflict(`${result.email} is an existing user`);
@@ -23,7 +23,7 @@ const userRegisterController = async (req, res, next) => {
     const accessToken = await signAccessToken(savedUser.id);
     const refreshToken = await signRefreshToken(savedUser.id);
 
-    res.send({ accessToken, refreshToken });
+    res.json({ accessToken, refreshToken, user: savedUser });
   } catch (error) {
     //console.log(error)
     // if error is thrown by joi schema validation append to the current error
@@ -34,9 +34,9 @@ const userRegisterController = async (req, res, next) => {
       // });
       // error.message = message;
       // error.status = 422;
-      JoiErrorFormatter(error)
+      JoiErrorFormatter(error);
     }
-    
+
     next(error);
   }
 };
@@ -44,8 +44,8 @@ const userRegisterController = async (req, res, next) => {
 const userLoginController = async (req, res, next) => {
   try {
     //const result = await userAuthSchema.validateAsync(req.body);
-    const result = req.body
-    console.log("req", req.body)
+    const result = req.body;
+    console.log("req", req.body);
     const user = await User.findOne({ email: result.email });
 
     if (!user) throw createError.NotFound("user not registered");
@@ -58,7 +58,7 @@ const userLoginController = async (req, res, next) => {
 
     res.send({ accessToken, refreshToken });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (error.isJoi) {
       return next(createError.BadRequest("invalid Email/Password"));
     }

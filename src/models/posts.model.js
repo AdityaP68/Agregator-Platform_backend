@@ -10,7 +10,7 @@ const PostSchema = new Schema(
       type: String,
       required: true,
     },
-    category: {
+    post_type: {
       type: String,
       required: true,
     },
@@ -53,17 +53,26 @@ const PostSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    media: {
-      media_type: {
+    resource: {
+      resource_type: {
         type: String,
+        required: true,
       },
-      url: {
+      resource_goal: {
         type: String,
+        required: true,
       },
-    },
+      currentStatus: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    }
   },
   { timestamps: true }
 );
+
+
 
 
 const Posts = model("posts", PostSchema);
