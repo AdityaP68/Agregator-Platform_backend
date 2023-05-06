@@ -18,6 +18,21 @@ const getAllPostsController = async (req, res, next) => {
     next(error);
   }
 };
+const getPostByIdController = async (req, res, next) => {
+  const {id} = req.params
+  console.log(id)
+  try{
+    //const post = await Posts.findById(mongoose.Types.ObjectId(id));
+    const objectId = mongoose.Types.ObjectId(id);
+    const posts = await Posts.find({ created_by: objectId });
+    console.log(posts);
+    res.json({count:posts?.length, posts});
+
+  }catch(error){
+    console.log(error)
+    next(error)
+  }
+};
 
 const createPostByUserIdController = async (req, res, next) => {
   try {
@@ -29,9 +44,9 @@ const createPostByUserIdController = async (req, res, next) => {
     const user = await User.findById(userId);
 
     // Check if user exists
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    // if (!user) {
+    //   return res.status(404).json({ message: "User not found" });
+    // }
 
     console.log("this is req.body", req.body);
     // Create a new Post instance
@@ -58,7 +73,7 @@ const createPostByUserIdController = async (req, res, next) => {
     // Return a success response
     return res.status(201).json({
       message: "Post created successfully",
-      post: post
+      post: post,
     });
   } catch (error) {
     // Pass any errors to the error handling middleware
@@ -179,4 +194,5 @@ export default {
   createCommentByPostIdController,
   editCommentByIdController,
   deleteCommentByIdController,
+  getPostByIdController
 };

@@ -50,6 +50,31 @@ const updateUserById = async (req, res, next) => {
   }
 };
 
+const getNGOListAndSearch = async (req, res, next) =>{
+  const query = req.query.name
+  console.log(query)
+  try{
+
+    let users;
+    if (query) {
+      // If query param is present, search for users with role 'ngo' and matching name
+      users = await User.find({
+        role: "ngo",
+        firstName: { $regex: query, $options: "i" }, // $regex is used for partial string matching, and $options: "i" is for case-insensitive search
+      }).exec();
+    } else {
+      // If no query param is present, fetch all users with role 'ngo'
+      users = await User.find({ role: "ngo" }).exec();
+    }
+
+    res.status(200).json({ count: users.length, users });
+
+  }catch(error){
+    console.log(error)
+    next(error)
+  }
+}
+
 const getUserList = async (req, res, next) => {};
 
 const deleteUser = async (req, res, next) => {};
@@ -59,4 +84,5 @@ export default {
   updateUserById,
   getUserList,
   deleteUser,
+  getNGOListAndSearch
 };

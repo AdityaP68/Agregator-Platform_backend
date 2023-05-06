@@ -22,10 +22,12 @@ const {
   createCommentByPostIdController,
   editCommentByIdController,
   deleteCommentByIdController,
+  getPostByIdController
 } = postsController;
 
 //Posts Routes
 router.get("/", getAllPostsController);
+router.get("/:id", getPostByIdController)
 router.post("/create/:userId", createPostByUserIdController);
 router.patch("/edit/:postId/:userId", editPostByIdController);
 router.delete("/delete/:postId/:userId", deletePostByIdController);
